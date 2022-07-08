@@ -57,23 +57,27 @@ exports.createUser = [
   },
 ];
 
-exports.loginUser = function (req, res, next) {
-  passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err || !user) {
-      return res.status(400).json({
-        message: 'Authentication Err. Something is not right.',
-        user: user,
-      });
-    }
-    req.login(user, { session: false }, (err) => {
-      if (err) {
-        return res.send(err);
+exports.loginUser = [
+  body('username').trim().escape(),
+  body('password').trim().escape(),
+  (req, res, next) => {
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+      if (err || !user) {
+        return res.status(400).json({
+          message: 'Authentication Err. Something is not right.',
+          user: user,
+        });
       }
-      //If user is coming from mongoose use user.toJSON.
-      //Else use JSON.stringify(user).
-      //The object to generate token should be a json object.
-      const token = jwt.sign(user.toJSON(), 'secret-key');
-      return res.json({ user: token });
-    });
-  })(req, res);
-};
+      req.login(user, { session: false }, (err) => {
+        if (err) {
+          return res.send(err);
+        }
+        //If user is coming from mongoose use user.toJSON.
+        //Else use JSON.stringify(user).
+        //The object to generate token should be a json object.
+        const token = jwt.sign(user.toJSON(), 'secret-key');
+        return res.json({ user: token });
+      });
+    })(req, res);
+  },
+];
