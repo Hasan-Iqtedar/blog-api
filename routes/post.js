@@ -6,6 +6,9 @@ const postController = require('../controllers/postController');
 //Get all posts.
 router.get('/', postController.getAllPosts);
 
+//Get published posts.
+router.get('/published', postController.getPublishedPosts);
+
 //Get a particular post.
 router.get('/:postId', postController.getPostById);
 
