@@ -14,18 +14,15 @@ exports.getAllPosts = function (req, res, next) {
     });
 };
 
-exports.getPostById = function (req, res, next) {
-  Post.findById(req.params.postId).exec(function (err, result) {
-    if (err) {
-      return next(err);
-    } else if (result === null) {
-      const error = new Error('Post not found');
-      error.status = 404;
-      return next(error);
-    } else {
+exports.getPublishedPosts = function (req, res, next) {
+  Post.find({ published: 'true' })
+    .sort({ title: 1 })
+    .exec(function (err, result) {
+      if (err) {
+        return next(err);
+      }
       res.json(result);
-    }
-  });
+    });
 };
 
 exports.createPost = [
