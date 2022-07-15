@@ -1,6 +1,5 @@
 const { body, validationResult } = require('express-validator');
 const ObjectId = require('mongodb').ObjectId;
-const passport = require('passport');
 const Comment = require('../models/comment');
 
 exports.getAllCommentsOfPost = function (req, res, next) {
